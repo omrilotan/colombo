@@ -4,11 +4,10 @@ const { prompt } = require('inquirer');
 const { update, end } = require('stdline');
 const colombo = require('.');
 
-
 start().then(console.log);
 
 async function start() {
-	const { file } = await prompt(
+	const { file = '' } = await prompt(
 		[
 			{
 				name: 'file',
@@ -17,6 +16,8 @@ async function start() {
 			},
 		],
 	);
+
+	const [ , , l, c ] = file.split(':');
 	const { url, column, line } = await prompt(
 		[
 			{
@@ -28,12 +29,14 @@ async function start() {
 			{
 				name: 'column',
 				message: 'Column number',
-				type: 'numebr',
+				type: 'number',
+				default: c,
 			},
 			{
 				name: 'line',
 				message: 'Line number',
-				type: 'numebr',
+				type: 'number',
+				default: l,
 			},
 		],
 	);

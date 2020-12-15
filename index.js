@@ -20,6 +20,11 @@ module.exports = async function colombo({ url, column, line }) {
 	try {
 		column = Number(column);
 		line = Number(line);
+
+		if (Number.isNaN(column) || Number.isNaN(line)) {
+			return '"column" and "line" must be numbers';
+		}
+
 		const { data } = await axios({ method: 'get', url });
 		const consumer = await new SourceMapConsumer(data);
 		const source = consumer.originalPositionFor({ line, column });
