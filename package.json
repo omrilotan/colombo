@@ -1,0 +1,30 @@
+{
+  "name": "colombo",
+  "version": "1.0.0",
+  "description": "🕵️‍♂️ View Javascript source code using source-map from CLI",
+  "author": "omrilotan",
+  "keywords": [
+    "sourcemap",
+    "source code",
+    "viewer",
+    "debug",
+    "🕵️‍♂️"
+  ],
+  "license": "MIT",
+  "main": "index.js",
+  "scripts": {
+    "lint": "eslint .",
+    "start": "./bin.js"
+  },
+  "dependencies": {
+    "axios": "^0.21.0",
+    "chalk": "^4.1.0",
+    "inquirer": "^7.3.3",
+    "source-map": "^0.7.3",
+    "stdline": "^1.0.0"
+  },
+  "devDependencies": {
+    "@omrilotan/eslint-config": "^1.3.0",
+    "eslint": "^7.15.0"
+  }
+}
