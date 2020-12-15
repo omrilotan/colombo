@@ -18,6 +18,8 @@ const li = (num, width) => num.toString().padStart(width, ' ') + '. ';
  */
 module.exports = async function colombo({ url, column, line }) {
 	try {
+		column = Number(column);
+		line = Number(line);
 		const { data } = await axios({ method: 'get', url });
 		const consumer = await new SourceMapConsumer(data);
 		const source = consumer.originalPositionFor({ line, column });
