@@ -1,8 +1,7 @@
 {
   "name": "colombo",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "description": "🕵️‍♂️ View Javascript source code using source-map from CLI",
-  "author": "omrilotan",
   "keywords": [
     "sourcemap",
     "source code",
@@ -10,7 +9,13 @@
     "debug",
     "🕵️‍♂️"
   ],
+  "author": "omrilotan",
   "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/omrilotan/colombo.git"
+  },
+  "homepage": "https://omrilotan.com/colombo/",
   "main": "index.js",
   "bin": "bin.js",
   "scripts": {
