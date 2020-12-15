@@ -7,12 +7,15 @@ const colombo = require('.');
 start().then(console.log);
 
 async function start() {
+	const [ arg ] = process.argv.slice(2);
+
 	const { file = '' } = await prompt(
 		[
 			{
 				name: 'file',
 				message: 'File URL (optional)',
 				type: 'input',
+				default: arg
 			},
 		],
 	);
