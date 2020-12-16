@@ -20,26 +20,28 @@ async function start() {
 		],
 	);
 
-	const [ , , l, c ] = file.split(':');
+	const match = file.match(/:(?<line>\d+):(?<column>\d+)$/);
+	const { groups = { line: undefined, column: undefined, file } } = match || {};
+
 	const { url, column, line } = await prompt(
 		[
 			{
 				name: 'url',
 				message: 'Source map',
 				type: 'input',
-				default: file.replace(/\?.*/, '') + '.map',
+				default: file.replace(/:\d+:\d+$/, '').replace(/\?.*/, '') + '.map',
 			},
 			{
 				name: 'column',
 				message: 'Column number',
 				type: 'number',
-				default: c,
+				default: groups.column,
 			},
 			{
 				name: 'line',
 				message: 'Line number',
 				type: 'number',
-				default: l,
+				default: groups.line,
 			},
 		],
 	);

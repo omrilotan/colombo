@@ -43,7 +43,7 @@ module.exports = async function colombo({ url, column, line }) {
 					const prefix = li(num, width);
 
 					if (num === source.line) {
-						const pad = prefix.length + source.column;
+						const pad = prefix.length + source.column + 1;
 						return [
 							yellow(prefix),
 							bold(line),
