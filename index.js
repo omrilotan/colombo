@@ -1,14 +1,7 @@
 const { SourceMapConsumer } = require('source-map');
 const axios = require('axios');
-const { bold, dim, yellow } = require('chalk');
-
-/**
- * List index
- * @param {number} num
- * @param {number} width
- * @returns {string}
- */
-const li = (num, width) => num.toString().padStart(width, ' ') + '. ';
+const { yellow } = require('chalk');
+const { snippet } = require('./lib/snippet');
 
 /**
  * @param {string}  o.url    Sourcemap URL
@@ -28,34 +21,8 @@ module.exports = async function colombo({ url, column, line }) {
 		const { data } = await axios({ method: 'get', url });
 		const consumer = await new SourceMapConsumer(data);
 		const source = consumer.originalPositionFor({ line, column });
-		const index = source.line - 1;
 		const content = consumer.sourceContentFor(source.source).split('\n');
-		const start = Math.max(index - 5, 0);
-		const end = Math.min(index + 5, content.length);
-		const width = end.toString().length;
 		consumer.destroy();
-
-		const snippet = content
-			.slice(start, end)
-			.map(
-				(line, i) => {
-					const num = i + start + 1;
-					const prefix = li(num, width);
-
-					if (num === source.line) {
-						const pad = prefix.length + source.column + 1;
-						return [
-							yellow(prefix),
-							bold(line),
-							'\n',
-							'^'.padStart(pad, ' '),
-						].join('');
-					} else {
-						return dim(prefix) + line;
-					}
-				},
-			)
-			.join('\n');
 
 		return [
 			yellow([
@@ -64,7 +31,7 @@ module.exports = async function colombo({ url, column, line }) {
 				source.column,
 			].join(':')),
 			'\n------\n',
-			snippet,
+			snippet({ content, source }),
 			'\n------',
 		].join('');
 	} catch (error) {

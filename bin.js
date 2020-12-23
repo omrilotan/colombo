@@ -1,7 +1,9 @@
 #!/usr/bin/env node
 
 const { prompt } = require('inquirer');
-const { update, end } = require('stdline');
+const { clear, update, end } = require('stdline');
+const axios = require('axios');
+const { getSourceCodeMapUrl } = require('./lib/getSourceCodeMapUrl');
 const colombo = require('.');
 
 start().then(console.log);
@@ -15,13 +17,18 @@ async function start() {
 				name: 'file',
 				message: 'File URL (optional)',
 				type: 'input',
-				default: arg
+				default: arg,
 			},
 		],
 	);
 
 	const match = file.match(/:(?<line>\d+):(?<column>\d+)$/);
 	const { groups = { line: undefined, column: undefined, file } } = match || {};
+	const clean = file.replace(/:\d+:\d+$/, '').replace(/\?.*/, '');
+	update('Load remote file');
+	const { data: code } = await axios({ method: 'get', url: clean });
+	clear();
+	const mapUrl = await getSourceCodeMapUrl(code, clean);
 
 	const { url, column, line } = await prompt(
 		[
@@ -29,7 +36,7 @@ async function start() {
 				name: 'url',
 				message: 'Source map',
 				type: 'input',
-				default: file.replace(/:\d+:\d+$/, '').replace(/\?.*/, '') + '.map',
+				default: mapUrl || (clean + '.map'),
 			},
 			{
 				name: 'column',
@@ -46,7 +53,7 @@ async function start() {
 		],
 	);
 
-	update('Loading...');
+	update('Load source map');
 	const result = await colombo({ url, line, column });
 	end();
 
