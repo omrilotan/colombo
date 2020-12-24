@@ -7,4 +7,8 @@ Run and follow instructions:
 npx colombo
 ```
 
-![](https://user-images.githubusercontent.com/516342/102261912-07a73e80-3f1b-11eb-9e51-212e56f65a4d.png)
+![](https://user-images.githubusercontent.com/516342/103102893-ef27da00-4626-11eb-928a-9c67c077520d.gif)
+
+```bash
+npx colombo [https://website.com/bundle.js:line:column]
+```
