@@ -62,7 +62,7 @@ async function start() {
 			[
 				{
 					name: 'url',
-					message: mapUrl ? 'Source map (found)' : 'Source map',
+					message: mapUrl ? 'Source map (found)' : 'Source map (assumed)',
 					type: 'input',
 					default: mapUrl || (clean + '.map'),
 				},
