@@ -24,7 +24,6 @@
   },
   "dependencies": {
     "axios": "^0.21.0",
-    "boxt": "^0.4.0",
     "chalk": "^4.1.0",
     "inquirer": "^7.3.3",
     "source-map": "^0.7.3",

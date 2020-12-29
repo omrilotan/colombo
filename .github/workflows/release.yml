@@ -10,6 +10,10 @@ jobs:
           - '14'
     steps:
     - uses: actions/checkout@v1
+    - name: Install dependencies
+      run: npm i
+    - name: Lint code
+      run: npm run lint
     - name: Add NPM token
       if: github.ref == 'refs/heads/main'
       run: echo "//registry.npmjs.org/:_authToken=${NPM_TOKEN}" > ~/.npmrc
