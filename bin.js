@@ -2,7 +2,7 @@
 
 const { prompt } = require('inquirer');
 const axios = require('axios');
-const { red } = require('chalk');
+const { bold, red } = require('chalk');
 const { getSourceCodeMapUrl } = require('./lib/getSourceCodeMapUrl');
 const { loader } = require('./lib/loader');
 const { update } = require('./lib/update');
@@ -10,6 +10,7 @@ const {
 	version,
 	homepage,
 	dependencies: { axios: axiosVersion },
+	bugs: { url: bugUrl },
 } = require('./package.json');
 const colombo = require('.');
 
@@ -27,6 +28,10 @@ start().then(console.log).catch(error => {
 	}
 	error.message = red(error.message);
 	console.error(error);
+
+	console.log(`
+I can see you were not successful. Feel free to ${bold('submit an issue')}
+${bugUrl}`);
 });
 
 let updateMessage;
@@ -37,9 +42,9 @@ async function start() {
 			updateMessage = message;
 		}).catch(() => null);
 
-		const [ arg ] = process.argv.slice(2);
+		const [ arg = '' ] = process.argv.slice(2);
 
-		const { file = '' } = await prompt(
+		const { file } = await prompt(
 			[
 				{
 					name: 'file',
@@ -53,30 +58,60 @@ async function start() {
 		const match = file.match(/:(?<line>\d+):(?<column>\d+)$/);
 		const { groups = { line: undefined, column: undefined, file } } = match || {};
 		const clean = file.replace(/:\d+:\d+$/, '').replace(/\?.*/, '');
-		loader.start('Load file');
-		const { data: code } = await axios({ method: 'get', url: clean });
-		loader.end();
-		const mapUrl = await getSourceCodeMapUrl(code, clean);
+		let url;
 
-		const { url, column, line } = await prompt(
-			[
-				{
+		if (clean) {
+			loader.start('Load file');
+			const { data: code } = await axios({ method: 'get', url: clean });
+			loader.end();
+			const mapUrl = getSourceCodeMapUrl(code, clean);
+
+			if (mapUrl) {
+				({ url } = await prompt([ {
 					name: 'url',
-					message: mapUrl ? 'Source map (found)' : 'Source map (assumed)',
+					message: 'Source map (found)',
 					type: 'input',
-					default: mapUrl || (clean + '.map'),
-				},
+					default: mapUrl,
+					validate: Boolean,
+				} ])
+				);
+			} else {
+				({ url } = await prompt([ {
+					name: 'url',
+					message: 'Source map (assumed)',
+					type: 'input',
+					default: clean + '.map',
+					validate: Boolean,
+				} ])
+				);
+			}
+		} else {
+			({ url } = await prompt([ {
+				name: 'url',
+				message: 'Source map',
+				type: 'input',
+				validate: Boolean,
+			} ])
+			);
+		}
+
+		if (!url) {
+			throw new Error('Source-map is a must');
+		}
+
+		const { column, line } = await prompt(
+			[
 				{
 					name: 'line',
 					message: 'Line number',
 					type: 'number',
-					default: groups.line,
+					default: groups.line || 1,
 				},
 				{
 					name: 'column',
 					message: 'Column number',
 					type: 'number',
-					default: groups.column,
+					default: groups.column || 1,
 				},
 			],
 		);

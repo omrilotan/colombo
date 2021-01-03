@@ -20,13 +20,13 @@ module.exports = async function colombo({ url, column, line }) {
 
 		const data = await getData(url);
 		if (data instanceof Error) {
-			return red(`Could not find file at ${url}:\n${data.message}`);
+			throw red(`Could not find file at ${url}:\n${data.message}`);
 		}
 
 		const consumer = await new SourceMapConsumer(data);
 		const source = consumer.originalPositionFor({ line, column });
 		if (!source.source) {
-			return red(`Could not original position for line ${line}, column ${column}`);
+			throw red(`Could not find source code from original position line ${line}, column ${column}`);
 		}
 		const content = consumer.sourceContentFor(source.source).split('\n');
 		consumer.destroy();
