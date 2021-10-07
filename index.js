@@ -28,7 +28,11 @@ module.exports = async function colombo({ url, column, line }) {
 		if (!source.source) {
 			throw red(`Could not find source code from original position line ${line}, column ${column}`);
 		}
-		const content = consumer.sourceContentFor(source.source).split('\n');
+		const sourceContent = consumer.sourceContentFor(source.source);
+		if (!sourceContent) {
+			throw red(`Could not find source code for ${source.source.split('\n').pop()} position line ${line}, column ${column}`);
+		}
+		const content = sourceContent.split('\n');
 		consumer.destroy();
 
 		return [
