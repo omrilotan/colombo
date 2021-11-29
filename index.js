@@ -57,7 +57,14 @@ module.exports = async function colombo({ url, column, line }) {
 
 async function getData(url) {
 	try {
-		const { data } = await axios({ method: 'get', url });
+		const result = await axios({ method: 'get', url });
+		if (!result.status.toString().startsWith('2')) {
+			throw new Error(`${url} returned status ${result.status}`);
+		}
+		if (typeof result.data === 'string' && result.data?.startsWith('<') && result.headers['content-type'].includes('html')) {
+			throw new Error(`${url} returns an HTML document with the title "${result.data.match(/<title>(.*)<\/title>/)?.pop()}"`);
+		}
+		const { data } = result;
 		return data;
 	} catch (error) {
 		return error;
