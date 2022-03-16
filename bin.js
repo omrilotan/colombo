@@ -3,6 +3,7 @@
 const { prompt } = require('inquirer');
 const axios = require('axios');
 const { bold, red } = require('chalk');
+const { satisfies } = require('semver');
 const { getSourceCodeMapUrl } = require('./lib/getSourceCodeMapUrl');
 const { loader } = require('./lib/loader');
 const { update } = require('./lib/update');
@@ -10,10 +11,16 @@ const {
 	version,
 	homepage,
 	dependencies: { axios: axiosVersion },
+	engines: { node },
 	bugs: { url: bugUrl },
 } = require('./package.json');
-const colombo = require('.');
 
+if (!satisfies(process.version, node)) {
+	console.error(new Error(`This node version (${process.version}) is not supported (${node}).`));
+	process.exit(1);
+}
+
+const colombo = require('.');
 
 Object.assign(
 	axios.defaults.headers.common,

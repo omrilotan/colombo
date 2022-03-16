@@ -54,7 +54,6 @@ module.exports = async function colombo({ url, column, line }) {
 	}
 };
 
-
 async function getData(url) {
 	try {
 		const result = await axios({ method: 'get', url });
