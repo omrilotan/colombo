@@ -1,15 +1,17 @@
-const { SourceMapConsumer } = require('source-map');
-const axios = require('axios');
-const { yellow, red } = require('chalk');
-const { snippet } = require('./lib/snippet');
+import { SourceMapConsumer } from "source-map";
+import chalk from "chalk";
+import { snippet } from "./lib/snippet/index.js";
+
+const { yellow, red } = chalk;
 
 /**
- * @param {string}  o.url    Sourcemap URL
- * @param {number}  o.line   Error Line
- * @param {number}  o.column Error column
+ * @param {string}  o.url     Sourcemap URL
+ * @param {number}  o.line    Error Line
+ * @param {number}  o.column  Error column
+ * @param {Headers} o.headers Request Headers
  * @returns {string} Source code visualisation
  */
-module.exports = async function colombo({ url, column, line }) {
+export async function colombo({ url, column, line, headers }) {
 	try {
 		column = Number(column);
 		line = Number(line);
@@ -18,7 +20,7 @@ module.exports = async function colombo({ url, column, line }) {
 			return '"column" and "line" must be numbers';
 		}
 
-		const data = await getData(url);
+		const data = await getData(url, { headers });
 		if (data instanceof Error) {
 			throw red(`Could not find file at ${url}:\n${data.message}`);
 		}
@@ -26,25 +28,25 @@ module.exports = async function colombo({ url, column, line }) {
 		const consumer = await new SourceMapConsumer(data);
 		const source = consumer.originalPositionFor({ line, column });
 		if (!source.source) {
-			throw red(`Could not find source code from original position line ${line}, column ${column}`);
+			throw red(
+				`Could not find source code from original position line ${line}, column ${column}`,
+			);
 		}
 		const sourceContent = consumer.sourceContentFor(source.source);
 		if (!sourceContent) {
-			throw red(`Could not find source code for ${source.source.split('\n').pop()} position line ${line}, column ${column}`);
+			throw red(
+				`Could not find source code for ${source.source.split("\n").pop()} position line ${line}, column ${column}`,
+			);
 		}
-		const content = sourceContent.split('\n');
+		const content = sourceContent.split("\n");
 		consumer.destroy();
 
 		return [
-			yellow([
-				source.source,
-				source.line,
-				source.column,
-			].join(':')),
-			'\n------\n',
+			yellow([source.source, source.line, source.column].join(":")),
+			"\n------\n",
 			snippet({ content, source }),
-			'\n------',
-		].join('');
+			"\n------",
+		].join("");
 	} catch (error) {
 		if (error.response) {
 			error.message = `Request map file at ${url} resulted in ${error.response.status} ${error.response.statusText}`;
@@ -52,19 +54,37 @@ module.exports = async function colombo({ url, column, line }) {
 
 		throw error;
 	}
-};
+}
 
-async function getData(url) {
+async function getData(url, { headers } = {}) {
 	try {
-		const result = await axios({ method: 'get', url });
-		if (!result.status.toString().startsWith('2')) {
-			throw new Error(`${url} returned status ${result.status}`);
+		const response = await fetch(url, { headers });
+		if (!response.ok) {
+			throw new Error(
+				`Failed to load file ${url}: ${response.status} ${response.statusText}`,
+			);
 		}
-		if (typeof result.data === 'string' && result.data?.startsWith('<') && result.headers['content-type'].includes('html')) {
-			throw new Error(`${url} returns an HTML document with the title "${result.data.match(/<title>(.*)<\/title>/)?.pop()}"`);
+		if (!response.ok) {
+			throw new Error(
+				`${url} returned status ${response.status} ${response.statusText}`,
+			);
 		}
-		const { data } = result;
-		return data;
+		const data = await response.text();
+
+		if (
+			typeof data === "string" &&
+			data?.startsWith("<") &&
+			response.headers["content-type"].includes("html")
+		) {
+			throw new Error(
+				`${url} returns an HTML document with the title "${result.data.match(/<title>(.*)<\/title>/)?.pop()}"`,
+			);
+		}
+		try {
+			return JSON.parse(data);
+		} catch (error) {
+			return error;
+		}
 	} catch (error) {
 		return error;
 	}

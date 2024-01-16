@@ -1,16 +1,5 @@
-# colombo [![](https://img.shields.io/npm/v/colombo.svg)](https://www.npmjs.com/package/colombo)
+# colombo: Read source code from sourcemap location
 
-## 🕵️‍♂️ Use source-map to view Javascript source code from CLI
-
-Run and follow instructions:
-
-```bash
-npx colombo
-```
-
-![](https://user-images.githubusercontent.com/516342/103102893-ef27da00-4626-11eb-928a-9c67c077520d.gif)
-
-```bash
 $ colombo [file[:line[:column]]] [options]
 
 Examples:
@@ -24,5 +13,3 @@ Options:
   --header, -H "key: value" Add a header to the request
   --version, -V             Show version number
   --help                    Show help
-```
-

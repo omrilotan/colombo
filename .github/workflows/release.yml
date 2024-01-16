@@ -4,21 +4,33 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
+    permissions:
+      actions: read
+      contents: write
     strategy:
       matrix:
         node-version:
-          - '16'
+          - "20"
     steps:
-    - uses: actions/checkout@v1
-    - name: Install dependencies
-      run: npm i
-    - name: Lint code
-      run: npm run lint
-    - name: Add NPM token
-      if: github.ref == 'refs/heads/main'
-      run: echo "//registry.npmjs.org/:_authToken=${NPM_TOKEN}" > ~/.npmrc
-      env:
-        NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
-    - name: Build and Publish
-      if: github.ref == 'refs/heads/main'
-      run: npx @lets/publish
+      - uses: actions/checkout@v4
+      - run: npm i
+      - run: npm run format
+      - name: commit auto fixes
+        env:
+          USERNAME: ${{ github.actor }}
+          BRANCH: ${{ github.ref_name }}
+          REPO: ${{ github.repository }}
+        run: |
+          if [ "$(git diff --quiet && echo 0 || echo $?)" -gt 0 ]; then
+            git config --global user.email "${USERNAME}@users.noreply.github.com" --replace-all
+            git config --global user.name "$USERNAME" --replace-all
+            git commit -am "😎 Autofix"
+            git remote set-url origin https://github.com/$REPO.git
+            git push origin $BRANCH
+            exit 1
+          fi
+      - name: Build and Publish
+        if: github.ref == 'refs/heads/main'
+        run: |
+          echo "//registry.npmjs.org/:_authToken=${NPM_TOKEN}" > ~/.npmrc
+          npx @lets/publish
