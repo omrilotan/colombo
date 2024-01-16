@@ -25,4 +25,3 @@ Options:
   --version, -V             Show version number
   --help                    Show help
 ```
-
