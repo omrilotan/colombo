@@ -1,6 +1,6 @@
 # colombo [![](https://img.shields.io/npm/v/colombo.svg)](https://www.npmjs.com/package/colombo)
 
-## 🕵️‍♂️ Use source-map to view Javascript source code from CLI
+## 🕵️‍♂️ Use remote source-map to view Javascript source code from CLI
 
 Run and follow instructions:
 
@@ -10,18 +10,37 @@ npx colombo
 
 ![](https://user-images.githubusercontent.com/516342/103102893-ef27da00-4626-11eb-928a-9c67c077520d.gif)
 
-```bash
-$ colombo [file[:line[:column]]] [options]
+<!-- Edit man file to change the following content>
+<!-- MAN START -->
 
-Examples:
+```txt
+NAME
+	colombo - Read source code from sourcemap location
 
-$ colombo --help
-$ colombo https://cdn.example.com/app.d0892a20d266460d6c63.js
-$ colombo https://cdn.example.com/app.d0892a20d266460d6c63.js:1:9694
-$ colombo https://cdn.example.com/app.d0892a20d266460d6c63.js:1:9694 -H "Access-Token: 1234"
+SYNOPSIS
+	colombo [file[:line[:column]]] [options]
 
-Options:
-  --header, -H "key: value" Add a header to the request
-  --version, -V             Show version number
-  --help                    Show help
+DESCRIPTION
+	Use remote source-map to view Javascript source code from CLI
+
+EXAMPLES
+	$ colombo https://cdn.example.com/app.d0892a2.js:1:9694
+	$ colombo https://cdn.example.com/app.d0892a2.js
+
+OPTIONS
+	--help										Show help
+	--version, -V							Show version number
+	--config									Read / Add persistant configuration
+	--header, -H "key: value"	Add a header to the request
+
+
+EXAMPLES
+	$ colombo --help
+	$ colombo https://cdn.example.com/app.d0892a2.js:1:9694 -H "Access-Token: 1234"
+	$ colombo --config
+	$ colombo --config -H "access-token: 1234"
 ```
+
+<!-- MAN END -->
+
+Persistant configuration is stored in `~/.colomborc`.

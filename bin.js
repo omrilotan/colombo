@@ -1,10 +1,10 @@
 #!/usr/bin/env node
 
-import { parseArgs } from "node:util";
 import { readFile } from "node:fs/promises";
 import inquirer from "inquirer";
 import chalk from "chalk";
 import semver from "semver";
+import { config } from "./lib/config/index.js";
 import { getSourceCodeMapUrl } from "./lib/getSourceCodeMapUrl/index.js";
 import { loader } from "./lib/loader/index.js";
 import { update } from "./lib/update/index.js";
@@ -13,7 +13,6 @@ const { satisfies } = semver;
 const { bold, red } = chalk;
 const { prompt } = inquirer;
 
-let updateMessage;
 start();
 
 async function start() {
@@ -49,35 +48,17 @@ async function start() {
 			)
 			.catch(() => null);
 
-		const {
-			values: { header = [], help = false, version: showVersion = false },
-			positionals: [arg = ""],
-		} = parseArgs({
-			args: process.argv.slice(2),
-			options: {
-				header: {
-					type: "string",
-					short: "H",
-					multiple: true,
-				},
-				version: {
-					type: "boolean",
-					short: "V",
-				},
-				help: {
-					type: "boolean",
-				},
-			},
-			allowPositionals: true,
-			strict: false,
-		});
+		const { headers, help, showVersion, arg, configured } = await config(
+			process.argv,
+		);
 
 		if (help) {
 			console.log(await readFile(new URL("./man", import.meta.url), "utf8"));
-			process.exit(0);
 		}
 		if (showVersion) {
 			console.log([name, version].join("@"));
+		}
+		if (configured || help || showVersion) {
 			process.exit(0);
 		}
 
@@ -95,9 +76,6 @@ async function start() {
 			match || {};
 		const clean = file.replace(/:\d+:\d+$/, "").replace(/\?.*/, "");
 		let url;
-		const headers = new Headers(
-			header.map((header) => header.split(":").map((value) => value.trim())),
-		);
 		if (!headers.has("User-Agent")) {
 			headers.set(
 				"User-Agent",

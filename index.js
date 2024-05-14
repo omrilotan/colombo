@@ -56,6 +56,9 @@ export async function colombo({ url, column, line, headers }) {
 	}
 }
 
+/**
+ * Retrieve source map data from a remote URL
+ */
 async function getData(url, { headers } = {}) {
 	try {
 		const response = await fetch(url, { headers });
