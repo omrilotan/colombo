@@ -1,5 +1,9 @@
 # Changelog
 
+## [2.2.0](https://github.com/omrilotan/isbot/compare/v2.1.0...v2.2.0)
+
+- Support reading sourcemap location from [SourceMap header](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/SourceMap)
+
 ## [2.1.0](https://github.com/omrilotan/isbot/compare/v2.0.0...v2.1.0)
 
 - Support reading and creating a config file (`colombo --config`)

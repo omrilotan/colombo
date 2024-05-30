@@ -4,6 +4,7 @@ import { readFile } from "node:fs/promises";
 import inquirer from "inquirer";
 import chalk from "chalk";
 import semver from "semver";
+import sourceMappingURL from "source-map-url";
 import { config } from "./lib/config/index.js";
 import { getSourceCodeMapUrl } from "./lib/getSourceCodeMapUrl/index.js";
 import { loader } from "./lib/loader/index.js";
@@ -90,9 +91,11 @@ async function start() {
 					`Failed to load file ${clean}: ${response.status} ${response.statusText}`,
 				);
 			}
-			const code = await response.text();
+			const file =
+				response.headers.get("SourceMap") ||
+				sourceMappingURL.getFrom(await response.text());
 			loader.end();
-			const mapUrl = getSourceCodeMapUrl(code, clean);
+			const mapUrl = getSourceCodeMapUrl(file, clean);
 
 			if (mapUrl) {
 				({ url } = await prompt([

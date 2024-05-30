@@ -67,11 +67,6 @@ async function getData(url, { headers } = {}) {
 				`Failed to load file ${url}: ${response.status} ${response.statusText}`,
 			);
 		}
-		if (!response.ok) {
-			throw new Error(
-				`${url} returned status ${response.status} ${response.statusText}`,
-			);
-		}
 		const data = await response.text();
 
 		if (
