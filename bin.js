@@ -157,10 +157,12 @@ async function start() {
 		loader.end();
 		console.log("\n");
 		if (typeof error.toJSON === "function") {
-			console.error(error.toJSON());
+			error = error.toJSON();
 			process.exit(1);
 		}
-		error.message = red(error.message);
+		if (error instanceof Error) {
+			error.message = red(error.message);
+		}
 		console.error(error);
 
 		console.log(`
