@@ -1,5 +1,9 @@
 # Changelog
 
+## [2.2.2](https://github.com/omrilotan/isbot/compare/v2.2.1...v2.2.2)
+
+- Tiny overlook
+
 ## [2.2.1](https://github.com/omrilotan/isbot/compare/v2.2.0...v2.2.1)
 
 - Allow to throw strings as errors in `colombo` (useful for custom error messages)

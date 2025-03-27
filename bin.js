@@ -158,7 +158,6 @@ async function start() {
 		console.log("\n");
 		if (typeof error.toJSON === "function") {
 			error = error.toJSON();
-			process.exit(1);
 		}
 		if (error instanceof Error) {
 			error.message = red(error.message);

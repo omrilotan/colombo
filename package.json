@@ -1,6 +1,6 @@
 {
   "name": "colombo",
-  "version": "2.2.1",
+  "version": "2.2.2",
   "description": "🕵️‍♂️ View Javascript source code using source-map from CLI",
   "keywords": [
     "sourcemap",

@@ -10,6 +10,18 @@ npx colombo
 
 ![](https://user-images.githubusercontent.com/516342/103102893-ef27da00-4626-11eb-928a-9c67c077520d.gif)
 
+## Features
+
+- Interactive
+- Supports reading sourcemap location from [SourceMap header](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/SourceMap)
+- Tries to figure out the source-map location from the source file content
+- Tries to figure out line and column from stack trace style input
+- Configure custom headers (one-time or persistant) †
+
+> † Persistant configuration is stored in `~/.colomborc`.
+
+## Manual
+
 <!-- Edit man file to change the following content>
 <!-- MAN START -->
 
@@ -42,5 +54,3 @@ EXAMPLES
 ```
 
 <!-- MAN END -->
-
-Persistant configuration is stored in `~/.colomborc`.
