@@ -24,6 +24,7 @@ npx colombo
 
 <!-- Edit man file to change the following content>
 <!-- MAN START -->
+
 ```man
 NAME
  colombo - Read source code from sourcemap location
@@ -51,4 +52,5 @@ EXAMPLES
  $ colombo --config
  $ colombo --config -H "access-token: 1234"
 ```
+
 <!-- MAN END -->
