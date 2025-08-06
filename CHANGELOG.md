@@ -1,5 +1,9 @@
 # Changelog
 
+## [2.2.3](https://github.com/omrilotan/isbot/compare/v2.2.2...v2.2.3)
+
+- Replace internal dependency
+
 ## [2.2.2](https://github.com/omrilotan/isbot/compare/v2.2.1...v2.2.2)
 
 - Tiny overlook

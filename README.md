@@ -24,33 +24,31 @@ npx colombo
 
 <!-- Edit man file to change the following content>
 <!-- MAN START -->
-
-```txt
+```man
 NAME
-	colombo - Read source code from sourcemap location
+ colombo - Read source code from sourcemap location
 
 SYNOPSIS
-	colombo [file[:line[:column]]] [options]
+ colombo [file[:line[:column]]] [options]
 
 DESCRIPTION
-	Use remote source-map to view Javascript source code from CLI
+ Use remote source-map to view Javascript source code from CLI
 
 EXAMPLES
-	$ colombo https://cdn.example.com/app.d0892a2.js:1:9694
-	$ colombo https://cdn.example.com/app.d0892a2.js
+ $ colombo https://cdn.example.com/app.d0892a2.js:1:9694
+ $ colombo https://cdn.example.com/app.d0892a2.js
 
 OPTIONS
-	--help										Show help
-	--version, -V							Show version number
-	--config									Read / Add persistant configuration
-	--header, -H "key: value"	Add a header to the request
+ --help                    Show help
+ --version, -V             Show version number
+ --config                  Read / Add persistant configuration
+ --header, -H "key: value" Add a header to the request
 
 
 EXAMPLES
-	$ colombo --help
-	$ colombo https://cdn.example.com/app.d0892a2.js:1:9694 -H "Access-Token: 1234"
-	$ colombo --config
-	$ colombo --config -H "access-token: 1234"
+ $ colombo --help
+ $ colombo https://cdn.example.com/app.d0892a2.js:1:9694 -H "Access-Token: 1234"
+ $ colombo --config
+ $ colombo --config -H "access-token: 1234"
 ```
-
 <!-- MAN END -->

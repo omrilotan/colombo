@@ -4,7 +4,7 @@ import { readFile } from "node:fs/promises";
 import inquirer from "inquirer";
 import chalk from "chalk";
 import semver from "semver";
-import sourceMappingURL from "source-map-url";
+import convertSourceMap from "convert-source-map";
 import { config } from "./lib/config/index.js";
 import { getSourceCodeMapUrl } from "./lib/getSourceCodeMapUrl/index.js";
 import { loader } from "./lib/loader/index.js";
@@ -13,6 +13,7 @@ import { update } from "./lib/update/index.js";
 const { satisfies } = semver;
 const { bold, red } = chalk;
 const { prompt } = inquirer;
+const { mapFileCommentRegex } = convertSourceMap;
 
 start();
 
@@ -91,9 +92,13 @@ async function start() {
 					`Failed to load file ${clean}: ${response.status} ${response.statusText}`,
 				);
 			}
-			const file =
-				response.headers.get("SourceMap") ||
-				sourceMappingURL.getFrom(await response.text());
+			let file = response.headers.get("SourceMap");
+			if (!file) {
+				const sourceCode = await response.text();
+				const r = mapFileCommentRegex.exec(sourceCode);
+				file = r[1] || r[2];
+			}
+
 			loader.end();
 			const mapUrl = getSourceCodeMapUrl(file, clean);
 

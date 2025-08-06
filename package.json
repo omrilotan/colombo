@@ -1,6 +1,6 @@
 {
   "name": "colombo",
-  "version": "2.2.2",
+  "version": "2.2.3",
   "description": "🕵️‍♂️ View Javascript source code using source-map from CLI",
   "keywords": [
     "sourcemap",
@@ -32,10 +32,10 @@
   },
   "dependencies": {
     "chalk": "^5.3.0",
+    "convert-source-map": "^2.0.0",
     "inquirer": "^12.5.0",
     "semver": "^7.5.4",
     "source-map": "^0.8.0-beta.0",
-    "source-map-url": "^0.4.0",
     "stdline": "^1.1.1"
   },
   "devDependencies": {
